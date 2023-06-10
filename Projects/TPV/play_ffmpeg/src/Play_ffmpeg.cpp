@@ -1,17 +1,12 @@
 #include <iostream>
 #include <cstdlib>
-
 #include <cstdint>
 #include <cstring>
-
-
 #include "Play_ffmpeg.hpp"
 
-#include <string>
-using namespace  std;
-
-
 #include <filesystem>
+
+using namespace  std;
 namespace fs = std::filesystem;
 
 extern "C" {
@@ -20,60 +15,55 @@ extern "C" {
 
 Play_ffmpeg::Play_ffmpeg(){}
 
-void Play_ffmpeg::checkDir(){
-    std::string path = "."; // Diretório atual
+void Play_ffmpeg::checkDir(std::string dir){
+    std::string path = dir; // Diretório atual
+    std::cout <<"Pasta /data:\n";
+    int i = 1;
     for (const auto& entry : fs::directory_iterator(path)) {
-        if (fs::is_directory(entry.status())) {
-            std::cout << entry.path().filename().string() << std::endl;
+        if (fs::is_regular_file(entry.status())) {
+            std::cout <<i<<": "<< entry.path().filename().string() << std::endl;
+            i++;
         }
     }
 
 }
 
-
-/*
-    avformat_network_init();
-    AVFormatContext* formatContext = nullptr;
-    //try{
-        
-    int result = avformat_open_input(&formatContext, "carros.mp4", nullptr, nullptr);
-        
-    result = avformat_find_stream_info(formatContext, nullptr);
-
-         // Comando que você deseja executar
-    const char* comando = "ffplay carros.mp4";
-
-            // Chamar a função system para executar o comando no terminal
-      
-    AVCodec* codec = nullptr;
+std::string Play_ffmpeg::selectVideo(){
+    checkDir("./data");
+    int index = 0, i=1;
+    std::cout <<"Selecione o número do seu vídeo:\n";
+    std::cin >> index;
     
-    int videoStreamIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, &codec, 0);
-    
-    std::string codecName = avcodec_get_name(codec->id);
-    std::cout << "Codec de vídeo: " << codecName << std::endl;
-
-    avformat_close_input(&formatContext);
-
-    int resultado = system(comando);
-      
-   }catch(const std::exception& e){
-        std::cerr << e.what() << '\n';
-        if (result < 0) {
-        std::cout << "Erro ao obter informações do stream." << std::endl;
-        return -1;
-        }
-        if (videoStreamIndex < 0) {
-            std::cout << "Nenhum stream de vídeo encontrado." << std::endl;
-        
-        }
-        if (result != 0) {
-        std::cout << "Erro ao abrir o arquivo MP4." << std::endl;
-        return -1;
-        }
-        if (result != 0) {
-        std::cout << "Erro ao abrir o arquivo MP4." << std::endl;
-        return -1;
+    for (const auto& entry : fs::directory_iterator("./data")) {
+        if (fs::is_regular_file(entry.status())) {
+            if( index == i){
+                return entry.path().filename().string();
+            }
+            
+            i++;
         }
     }
-*/
+    return "not found";
+}
+
+void Play_ffmpeg::playVideo(){
+
+    std::string arq = selectVideo();
     
+    std::string c_char = "ffplay -autoexit ./data/"+arq;
+    int result = -1;
+    const char* arquivo = const_cast<char*>(arq.c_str());
+    const char* comando = const_cast<char*>(c_char.c_str());
+    try
+    {
+       
+        result = system(comando);
+
+        std::cout <<"Result :"<< result <<endl;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        std::cout << "Error ao reproduzir video: \n";
+    }
+}

@@ -1,13 +1,18 @@
 #ifndef CAST_HPP
 #define CAST_HPP
 
+#include <string>
+using namespace  std;
 
 class Play_ffmpeg {
 
     public:
- 
-    Play_ffmpeg();
-    void checkDir();
+        Play_ffmpeg();
+        
+        std::string selectVideo();
+        void playVideo();
+    private:
+        void checkDir(std::string dir);
     
     
 };

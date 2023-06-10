@@ -24,3 +24,5 @@ Siga as instruções abaixo para executar o reprodutor de vídeo:
 - Terminal@Rodrigo:/play_ffmpeg# make
 
 - Terminal@Rodrigo:/play_ffmpeg# ./output/main
+
+#### Obs : Certfique-se se você está usando um compilador c++ <= 17 
