@@ -1,17 +1,34 @@
 #include <iostream>
 #include <cstdlib>
-#include <string>
+
 #include <cstdint>
 #include <cstring>
 
+
+#include "Play_ffmpeg.hpp"
+
+#include <string>
 using namespace  std;
+
+
+#include <filesystem>
+namespace fs = std::filesystem;
 
 extern "C" {
     #include <libavformat/avformat.h>
 }
 
-Play_ffmeg::Play_ffmeg(){}
+Play_ffmpeg::Play_ffmpeg(){}
 
+void Play_ffmpeg::checkDir(){
+    std::string path = "."; // Diretório atual
+    for (const auto& entry : fs::directory_iterator(path)) {
+        if (fs::is_directory(entry.status())) {
+            std::cout << entry.path().filename().string() << std::endl;
+        }
+    }
+
+}
 
 
 /*

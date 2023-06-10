@@ -1,5 +1,5 @@
 # Configurações do projeto
-TARGET = meu_programa
+TARGET = main
 SRCDIR = src
 INCDIR = inc
 OBJDIR = obj
@@ -8,7 +8,7 @@ OUTPUTDIR = output
 
 # Compilador e flags
 CC = g++
-CFLAGS = -std=c++11 -Wall -Wextra
+CFLAGS = -std=c++17 -Wall -Wextra
 LDFLAGS = -lavformat -lavcodec -lavutil
 
 # Arquivos fonte, objetos e bibliotecas
